@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "d85eab98-b7f5-4fd2-840c-0c6adfbdf4a5",
+		"name": "email_assessment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Post File",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "msg",
+							"type": "file",
+							"src": "/C:/Users/Horaizon/Downloads/sampleEmails.tar/smallset/20110401_alchemyworx_14461429_multialt.msg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get email data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/?limit=25&offset=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						""
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "25"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bulk",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "tar",
+							"type": "file",
+							"src": "/C:/Users/Horaizon/Downloads/sampleEmails.tar.gz"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
