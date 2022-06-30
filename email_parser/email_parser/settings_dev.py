@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-from os import environ, sys
+from os import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,26 +76,13 @@ WSGI_APPLICATION = 'email_parser.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-if 'test' in sys.argv:
-    SOUTH_TESTS_MIGRATE = False
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-            'TEST_NAME': 'db_test.sqlite3'
-        },
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': environ.get("MYSQL_DATABASE") or 'emails_db',
-            'USER': environ.get("MYSQL_USER") or 'root',
-            'PASSWORD': environ.get("MYSQL_PASSWORD") or '12345678',
-            'HOST': environ.get("MYSQL_HOST") or '127.0.0.1',
-            'PORT': '3306',
-        }
-    }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        'TEST_NAME': 'db_test.sqlite3'
+    },
+}
 
 
 # Password validation

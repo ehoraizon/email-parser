@@ -169,7 +169,7 @@ const App = () => {
                   </td>
                   <td class="px-6 py-3 border-b border-gray-200 whitespace-nowrap"> { `${email.to_name} ${email.to_email}` } </td>
                   <td class="px-6 py-3 border-b border-gray-200 whitespace-nowrap"> { `${email.from_name} ${email.from_email}` } </td>
-                  <td class="px-6 py-3 border-b border-gray-200 whitespace-nowrap"> { new Date(email.date).toLocaleString() } </td>
+                  <td class="px-6 py-3 border-b border-gray-200 whitespace-nowrap"> { new Date(email.date * 1000).toLocaleString() } </td>
                   <td class="px-6 py-3 border-b border-gray-200 whitespace-nowrap"> { email.subject } </td>
                   <td class="px-6 py-3 border-b border-gray-200 whitespace-nowrap"> { email.message_id } </td>
                 </tr>

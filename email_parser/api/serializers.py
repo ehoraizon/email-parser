@@ -11,7 +11,7 @@ from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
 from .models import EmailData
 
-
+#For extracting the date from the Date field in the emails
 TIME_FORMAT = "%d %b %Y %H:%M:%S %z"
 TIME_RE = [
     re.compile("([0-9]{1,2} [A-Z]{1}[a-z]{2} [1-2]{1}[0-9]{3} [0-9]{2}:[0-9]{2}:[0-9]{2} [\+|\-]0[0-9]{3})"),
@@ -22,9 +22,11 @@ logger = logging.getLogger(__name__)
 
 BASE_DIR = path.sep.join(path.abspath(__file__).split(path.sep)[:-2])
 
+#timezones json file
 with open(path.join(BASE_DIR, 'timezones.json'), 'rt') as file:
     timezones = json.load(file)
 
+#Serializer for email object
 class EmailDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmailData
@@ -39,12 +41,14 @@ class EmailDataSerializer(serializers.ModelSerializer):
             'date',
         )
 
+#Serializer for get responses
 class EmailsDataListSerializer(serializers.Serializer):
     limit = serializers.IntegerField(default=25, max_value=25)
     offset = serializers.IntegerField(default=0)
     size = serializers.IntegerField(default=0, max_value=25)
     emails = serializers.ListField(default=[], allow_empty=True)
 
+#Serializer for put responses
 class EmailsSerializer(serializers.Serializer):
     size = serializers.IntegerField()
     emails = serializers.ListField(allow_empty=False)
@@ -60,6 +64,7 @@ class EmailFileSerializer(serializers.Serializer):
         else:
             parsed_email = email.message_from_bytes(validated_data['msg'])
 
+        #extract the name and the email from the fields
         full_to = parsed_email.get("To").replace('"','') \
                         .replace("<", '').replace(">", '').split()
         full_from = parsed_email.get("From").replace('"','') \
@@ -67,14 +72,18 @@ class EmailFileSerializer(serializers.Serializer):
 
         date = None
         for re_exp in TIME_RE:
+            #check for regexp match
             results = re_exp.findall(parsed_email.get("Date"))
             if len(results):
+                #check if timezone is not in GTC format
                 if type(results[0]) == type(()):
+                    #convert the timezone to GTC format
                     results[0] = '{} {}'.format(results[0][0], timezones.get(results[0][1]))
+                #convert datetime to timestamp
                 date = int(
                     time.mktime(
                         time.strptime(results[0], TIME_FORMAT)
-                    ) * 1000
+                    )
                 )
                 break
 
@@ -96,18 +105,22 @@ class CompressedEmailsFileSerializer(serializers.Serializer):
         emails = []
         tar_file = tarfile.open(fileobj=validated_data['tar'])
         for file in tar_file.getnames():
+            # check if the file ends in .msg
             if file.endswith('.msg'):
                 try:
+                    #create the email object
                     email_data = EmailFileSerializer.create(
                         {'msg': tar_file.extractfile(file).read()},
                         is_file=False
                     )
                     try:
+                        #run validators
                         email_data.full_clean()
                     except ValidationError as e:
                         logger.warning(e)
                         continue
                     else:
+                        #save to db
                         email_data.save()
                         emails.append(EmailDataSerializer(email_data).data)
                 except Exception as e:
