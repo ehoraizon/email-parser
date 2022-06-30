@@ -6,6 +6,8 @@ Containerized with [Docker](https://www.docker.com/) and [Docker-Compose](https:
 
 Default to **localhost:8000**
 
+[Postman API file](./email_parser/test_assets/email_assessment.postman_collection.json) 
+
 ## Install & Build the frontend
 
 ```
