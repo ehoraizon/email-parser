@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: 12345678
+        MYSQL_DATABASE: "emails_db"
+  parser:
+    restart: always
+    ports:
+        - "8000:8000"
+    build: ./
+    depends_on:
+        - db
+    environment: 
+        MYSQL_HOST: db
+        MYSQL_USER: root
+        MYSQL_DATABASE: "emails_db"
+        MYSQL_PASSWORD: 12345678
+        MYSQL_PORT: 3306
+        PORT: 8000
