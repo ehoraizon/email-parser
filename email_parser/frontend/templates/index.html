@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Email Parser</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "frontend/main.css" %}"
+    />
+  </head>
+  <body>
+
+    <nav class="flex items-center lg:justify-between h-14">
+      <div class="flex-1 min-w-0 p-0 lg:px-5">
+        <h2 class="text-2xl text-center text-white lg:text-left font-bold leading-7 p-text-gray-900 sm:text-3xl sm:truncate"> Email Parser </h2>
+      </div>
+    </nav>
+
+    <div id="main">
+      <div id="app"></div>
+    </div>
+
+    <footer class="h-14 w-full"></footer>
+
+    <script src="{% static "frontend/main.js" %}"></script>
+  </body>
+</html>

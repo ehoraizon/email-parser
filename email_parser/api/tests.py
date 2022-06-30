@@ -15,7 +15,14 @@ class ApiTest(APITestCase):
         self.assertEqual(
             b"""{"id":1,"message_id":"<3709e1a3-663f-464c-a38f-584ae8c9fe24@xtinmta105.xt.local>","to_name":"","to_email":"aeg@cp.delivery.ncrcustomerpower.com","from_name":"","from_email":"enews@events.lagalaxy.com","subject":"April Fool's Day Offer, Save up to 40% with no fees","date":1301673982000}""",
             response.content
-        )        
+        )
+
+    def test_post_conflict(self):
+        self.test_post()
+        with open(path.join(BASE_DIR, "test_assets", "test.msg"), "rb") as file:
+            response = self.client.post("/api/", {"msg": file}, format='multipart')
+        
+        self.assertEqual(status.HTTP_409_CONFLICT, response.status_code)   
     
     def test_post_bad_request(self):
         response = self.client.post("/api/", {"msg": b""}, format='multipart')

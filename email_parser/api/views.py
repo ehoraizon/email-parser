@@ -58,14 +58,14 @@ class EmailDataAPI(APIView):
                 email_data = EmailFileSerializer.create(file_serializer.validated_data)
                 try:
                     email_data.full_clean()
-                except ValidationError:
+                except ValidationError as e:
+                    if "message_id" in e.message_dict \
+                        and e.message_dict["message_id"][0] == "Email data with this Message id already exists.":
+                        return Response(status=status.HTTP_409_CONFLICT)
                     return Response(status=status.HTTP_400_BAD_REQUEST)
                 else:
-                    serializer = EmailDataSerializer(email_data)
-                    queryset = EmailData.objects.filter(message_id=email_data.message_id)
-                    if queryset.exists():
-                        return Response(status=status.HTTP_409_CONFLICT)
                     email_data.save()
+                    serializer = EmailDataSerializer(email_data)
                     return Response(data=serializer.data, status=status.HTTP_200_OK)
             except Exception as e:
                 logging.error(e)
